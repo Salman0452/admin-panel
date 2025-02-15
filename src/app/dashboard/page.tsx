@@ -8,8 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
+interface User {
+  id: number;
+  email: string;
+  password: string;
+  // Add more fields as necessary
+}
+
 export default function Dashboard() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -29,7 +36,7 @@ export default function Dashboard() {
       if (error) {
         console.error("Error fetching users:", error);
       } else {
-        setUsers(data); // If data is null, set an empty array
+        setUsers(data as User[]); // If data is null, set an empty array
       }
       setLoading(false);
       NProgress.done();
