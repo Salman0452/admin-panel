@@ -5,7 +5,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/custom/Sidebar";
 import Navbar from "@/components/custom/Navbar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import "nprogress/nprogress.css";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import UpdateProductDialog from "@/components/custom/UpdateDialog";
+import Image from "next/image";
 
 export default function Products() {
   const [products, setProducts] = useState<any[]>([]);
@@ -163,7 +163,7 @@ const refreshProducts = async () => {
                 <tr key={product.id} className="border">
                   <td className="p-2 border">{product.id}</td>
                   <td className="p-2 border">
-                    <img src={product.image_url} alt={product.name} className="h-12 w-12 object-cover rounded" />
+                    <Image src={product.image_url} alt={product.name} className="h-12 w-12 object-cover rounded" />
                   </td>
                   <td className="p-2 border">{product.name}</td>
                   <td className="p-2 border">Rs {product.price}</td>
