@@ -8,12 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-interface User {
-  id: number;
-  email: string;
-  password: string;
-  // Add more fields as necessary
-}
+type User = { id: number; name: string; email: string };
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
