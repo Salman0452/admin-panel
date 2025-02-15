@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import Sidebar from "@/components/custom/Sidebar";
 import Navbar from "@/components/custom/Navbar";
 import { Button } from "@/components/ui/button";
@@ -16,11 +16,11 @@ import UpdateProductDialog from "@/components/custom/UpdateDialog";
 import Image from "next/image";
 
 export default function Products() {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -36,11 +36,11 @@ export default function Products() {
   }, []);
 
   const fetchProducts = async () => {
-    let { data, error } = await supabase.from("products").select("*");
+    const { data, error } = await supabase.from("products").select("*");
     if (error) {
       console.error("Error fetching products:", error);
     } else {
-      setProducts(data || []);
+      setProducts(data);
     }
     setLoading(false);
     NProgress.done();
@@ -100,18 +100,18 @@ export default function Products() {
 
   };
 
-  const handleDelete = async (id: any) => {
+  const handleDelete = async (id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) console.error("Error deleting product:", error);
     else setProducts(products.filter((product) => product.id !== id));
 };
 
 const refreshProducts = async () => {
-    let { data, error } = await supabase.from("products").select("*");
+    const { data, error } = await supabase.from("products").select("*");
     if (error) {
         console.error("Error fetching products:", error);
       } else {
-        setProducts(data || []);
+        setProducts(data);
       }
   };
 
