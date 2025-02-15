@@ -25,7 +25,7 @@ export default function Dashboard() {
     };
 
     const fetchUsers = async () => {
-      let { data, error } = await supabase.from("users").select("*");
+      const { data, error } = await supabase.from("users").select("*");
       if (error) {
         console.error("Error fetching users:", error);
       } else {
