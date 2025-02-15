@@ -19,6 +19,7 @@ export default function Login() {
       setError(error.message);
     } else {
       router.push("/dashboard");
+      console.log(data)
     }
   };
 
