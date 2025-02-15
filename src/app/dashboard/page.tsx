@@ -1,0 +1,79 @@
+"use client"
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
+import Sidebar from "@/components/custom/Sidebar";
+import Navbar from "@/components/custom/Navbar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+export default function Dashboard() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    NProgress.start();
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+      } else {
+        fetchUsers();
+      }
+    };
+
+    const fetchUsers = async () => {
+      let { data, error } = await supabase.from("users").select("*");
+      if (error) {
+        console.error("Error fetching users:", error);
+      } else {
+        setUsers(data || []); // If data is null, set an empty array
+      }
+      setLoading(false);
+      NProgress.done();
+    };
+
+    checkAuth();
+  }, [router]);
+
+//   if (loading) return <p>Loading...</p>;
+
+  return (
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex-1">
+        <Navbar />
+        <div className="p-4">
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>User List</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <table className="w-full border">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="p-2">ID</th>
+                    <th className="p-2">Email</th>
+                    <th className="p-2">Password</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id} className="border">
+                      <td className="p-2">{user.id}</td>
+                      <td className="p-2">{user.email}</td>
+                      <td className="p-2">{user.password}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
