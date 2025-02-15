@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-type User = { id: number; name: string; email: string };
+type User = { id: number; email: string; password: string };
 
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
@@ -31,7 +31,7 @@ export default function Dashboard() {
       if (error) {
         console.error("Error fetching users:", error);
       } else {
-        setUsers(data as User[]); // If data is null, set an empty array
+        setUsers(data || []); // If data is null, set an empty array
       }
       setLoading(false);
       NProgress.done();
