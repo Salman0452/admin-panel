@@ -9,7 +9,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 export default function Dashboard() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -29,7 +29,7 @@ export default function Dashboard() {
       if (error) {
         console.error("Error fetching users:", error);
       } else {
-        setUsers(data || []); // If data is null, set an empty array
+        setUsers(data); // If data is null, set an empty array
       }
       setLoading(false);
       NProgress.done();
@@ -38,7 +38,9 @@ export default function Dashboard() {
     checkAuth();
   }, [router]);
 
-//   if (loading) return <p>Loading...</p>;
+  if (loading) {
+    console.log("Loading...");
+  }
 
   return (
     <div className="flex h-screen">
