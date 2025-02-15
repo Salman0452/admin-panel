@@ -163,7 +163,7 @@ const refreshProducts = async () => {
                 <tr key={product.id} className="border">
                   <td className="p-2 border">{product.id}</td>
                   <td className="p-2 border">
-                    <Image src={product.image_url} alt={product.name} className="h-12 w-12 object-cover rounded" />
+                    <Image src={product.image_url} alt={product.name} width={100} height={100} className="h-12 w-12 object-cover rounded" />
                   </td>
                   <td className="p-2 border">{product.name}</td>
                   <td className="p-2 border">Rs {product.price}</td>
