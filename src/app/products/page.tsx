@@ -1,5 +1,5 @@
 "use client";
-
+import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 // import { useRouter } from "next/navigation";
@@ -15,9 +15,17 @@ import { MoreVertical } from "lucide-react";
 import UpdateProductDialog from "@/components/custom/UpdateDialog";
 import Image from "next/image";
 
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  image_url: string;
+};
+
 export default function Products() {
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   // const router = useRouter();
@@ -56,6 +64,8 @@ export default function Products() {
       setFormData({ ...formData, image: file });
     }
   };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.price || !formData.image) {
@@ -100,7 +110,7 @@ export default function Products() {
 
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id:number) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) console.error("Error deleting product:", error);
     else setProducts(products.filter((product) => product.id !== id));
@@ -138,7 +148,7 @@ const refreshProducts = async () => {
                   <Input name="name" placeholder="Product Name" onChange={handleChange} />
                   <Input name="price" type="number" placeholder="Price" onChange={handleChange} />
                   <Input name="description" placeholder="Description" onChange={handleChange} />
-                  <Input type="file" accept="image/*" onChange={handleFileChange} />
+                  <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef}/>
                   <Button onClick={handleSubmit} disabled={loading}>
                     {loading ? "Adding..." : "Add Product"}
                   </Button>
@@ -185,7 +195,10 @@ const refreshProducts = async () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                   </td>
-                  {selectedProduct && (
+                </tr>
+              ))}
+            </tbody>
+            {selectedProduct && (
                     <UpdateProductDialog
                         open={open}
                         setOpen={setOpen}
@@ -193,9 +206,6 @@ const refreshProducts = async () => {
                         refreshProducts={refreshProducts} // Refresh list after update
                     />
                     )}
-                </tr>
-              ))}
-            </tbody>
           </table>
 
           {loading && <p>Loading...</p>}
