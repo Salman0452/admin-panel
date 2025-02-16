@@ -13,6 +13,7 @@ type User = { id: number; email: string; password: string };
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false); // Add auth state
   const router = useRouter();
 
   const fetchUsers = async () => {
@@ -31,14 +32,17 @@ export default function Dashboard() {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push("/login");
+        router.push("/");
       } else {
+        setAuthenticated(true);
         fetchUsers();
       }
     };
 
     checkAuth();
   }, [router]);
+
+  if (!authenticated) return null; // Show nothing until authentication is checked
 
   if (loading) {
     console.log("Loading...");
