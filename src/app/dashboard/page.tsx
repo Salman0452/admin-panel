@@ -16,16 +16,16 @@ export default function Dashboard() {
   const router = useRouter();
 
   const fetchUsers = async () => {
-    const { data, error } = await supabase.from("users").select("*");
+    const { data, error } = await supabase.from("users").select("*").returns<User[]>();
     if (error) {
       console.error("Error fetching users:", error);
     } else {
-      setUsers(data || []); // If data is null, set an empty array
+      setUsers(data?? []); // If data is null, set an empty array
     }
     setLoading(false);
     NProgress.done();
   };
-  
+
   useEffect(() => {
     NProgress.start();
     const checkAuth = async () => {
